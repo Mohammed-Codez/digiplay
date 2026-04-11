@@ -3,9 +3,6 @@
 [ext_resource type="Script" uid="uid://dyr3vmwn7xwqr" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://bqsf5eoqnkmib" path="res://assets/small_mario.png" id="2_g2els"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_186t8"]
-size = Vector2(10, 14)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_qhqgy"]
 atlas = ExtResource("2_g2els")
 region = Rect2(0, 0, 16, 16)
@@ -59,17 +56,23 @@ animations = [{
 "speed": 9.0
 }]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_186t8"]
+size = Vector2(10, 14)
+
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_g2els")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, 1)
-shape = SubResource("RectangleShape2D_186t8")
-
 [node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(5, 5)
+zoom = Vector2(10, 10)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_smehm")
 animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_186t8")
+
+[node name="CoyoteTimer" type="Timer" parent="."]
+wait_time = 0.1
