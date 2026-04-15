@@ -1,7 +1,16 @@
-[gd_scene load_steps=10 format=3 uid="uid://cvtad3k7qxe0l"]
+[gd_scene load_steps=16 format=3 uid="uid://cvtad3k7qxe0l"]
 
 [ext_resource type="Script" uid="uid://dyr3vmwn7xwqr" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="Texture2D" uid="uid://bqsf5eoqnkmib" path="res://assets/small_mario.png" id="2_g2els"]
+[ext_resource type="Shader" uid="uid://sprxbwwtqrfm" path="res://shaders/mario.gdshader" id="2_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://bp12eyr15xnap" path="res://assets/small_mario_v2.png" id="3_dqkch"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dqkch"]
+shader = ExtResource("2_qhqgy")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_smehm"]
+atlas = ExtResource("3_dqkch")
+region = Rect2(80, 0, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qhqgy"]
 atlas = ExtResource("2_g2els")
@@ -25,6 +34,14 @@ region = Rect2(48, 0, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_smehm"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_smehm")
+}],
+"loop": true,
+"name": &"die",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_qhqgy")
@@ -56,23 +73,46 @@ animations = [{
 "speed": 9.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_186t8"]
-size = Vector2(10, 14)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qhqgy"]
+radius = 5.0
+height = 14.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
+size = Vector2(14, 1)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dqkch"]
+radius = 5.1
+height = 13.0
 
 [node name="Player" type="CharacterBody2D"]
 script = ExtResource("1_g2els")
 
-[node name="Camera2D" type="Camera2D" parent="."]
-zoom = Vector2(10, 10)
-
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 texture_filter = 1
+material = SubResource("ShaderMaterial_dqkch")
 sprite_frames = SubResource("SpriteFrames_smehm")
-animation = &"idle"
+animation = &"die"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1)
-shape = SubResource("RectangleShape2D_186t8")
+shape = SubResource("CapsuleShape2D_qhqgy")
+
+[node name="SmusherArea" type="Area2D" parent="."]
+
+[node name="SmusherCollision" type="CollisionShape2D" parent="SmusherArea"]
+position = Vector2(0, 6.5)
+shape = SubResource("RectangleShape2D_g2els")
+
+[node name="KilledArea" type="Area2D" parent="."]
+position = Vector2(0, 0.5)
+
+[node name="KilledCollision" type="CollisionShape2D" parent="KilledArea"]
+shape = SubResource("CapsuleShape2D_dqkch")
 
 [node name="CoyoteTimer" type="Timer" parent="."]
-wait_time = 0.1
+wait_time = 0.05
+one_shot = true
+
+[node name="UpCoyoteTimer" type="Timer" parent="."]
+wait_time = 0.25
+one_shot = true

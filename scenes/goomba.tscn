@@ -1,0 +1,73 @@
+[gd_scene load_steps=10 format=3 uid="uid://dj78y3etpvvye"]
+
+[ext_resource type="Texture2D" uid="uid://buipjhcfpx3nq" path="res://assets/goomba.png" id="1_21hcc"]
+[ext_resource type="Script" uid="uid://b7nxua4gfu7s0" path="res://scripts/goomba.gd" id="1_fgpj4"]
+[ext_resource type="Shader" uid="uid://b74c55d7k7cih" path="res://shaders/overworld.gdshader" id="1_s1jgw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_fgpj4"]
+shader = ExtResource("1_s1jgw")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l0j8n"]
+atlas = ExtResource("1_21hcc")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fgpj4"]
+atlas = ExtResource("1_21hcc")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l0j8n"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l0j8n")
+}],
+"loop": true,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fgpj4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fgpj4")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 3.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fgpj4"]
+radius = 7.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_fgpj4"]
+size = Vector2(16, 3)
+
+[node name="Goomba" type="CharacterBody2D"]
+script = ExtResource("1_fgpj4")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+texture_filter = 1
+material = SubResource("ShaderMaterial_fgpj4")
+sprite_frames = SubResource("SpriteFrames_l0j8n")
+animation = &"dead"
+autoplay = "walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 1)
+shape = SubResource("CircleShape2D_fgpj4")
+
+[node name="SmushedArea" type="Area2D" parent="."]
+position = Vector2(0, -7.5)
+
+[node name="SmushedCollision" type="CollisionShape2D" parent="SmushedArea"]
+shape = SubResource("RectangleShape2D_fgpj4")
+
+[node name="KillerArea" type="Area2D" parent="."]
+position = Vector2(0, 1)
+
+[node name="KillerCollision" type="CollisionShape2D" parent="KillerArea"]
+shape = SubResource("CircleShape2D_fgpj4")
+
+[connection signal="area_entered" from="SmushedArea" to="." method="_on_smushed_area_entered"]
+[connection signal="area_entered" from="KillerArea" to="." method="_on_killer_area_entered"]
