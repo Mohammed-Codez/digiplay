@@ -1,21 +1,14 @@
 extends CharacterBody2D
 
-# editables
 @export var max_speed := 1200.0
-@export_enum('Alive', 'Dead') var state := 'Alive'
-
-@onready var prev_state := state
-
 @onready var direction := max_speed
+@export_enum('Alive', 'Shelled', 'Dead') var state := 'Alive'
 
-# inner nodes
 @onready var sprite := $AnimatedSprite2D
 @onready var collider := $CollisionShape2D
 
 @onready var smushed := $SmushedArea
 @onready var killer := $KillerArea
-
-@onready var death_timer := $DeathTimer
 
 # player
 @onready var player := $'..'/Player
@@ -36,35 +29,26 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 func _process(delta: float) -> void:
-	if sprite.frame == 1:
-		sprite.flip_h = true
-	else:
-		sprite.flip_h = false
-	
-	if state == 'Dead' and state != prev_state:
+	if velocity.x != 0:
+		if abs(velocity.x) != velocity.x:
+			sprite.flip_h = true
+		if abs(velocity.x) == velocity.x:
+			sprite.flip_h = false
+
+func _on_smushed_area_entered(area: Area2D) -> void:
+	if area == smusher and\
+	(abs(player.velocity.y) == player.velocity.y) and player.velocity.y != 0:
 		direction = 0
-	
-		collider.set_deferred('disabled', true)
+		
 		killer.set_deferred('monitoring', false)
 		smushed.set_deferred('monitoring', false)
 		
 		player.velocity.y *= -0.7
 		velocity.y = -100
+		
 		velocity.x = velocity.x - player.velocity.x
 		
-		sprite.play('dead')
-		
-		death_timer.start()
-		
-	if death_timer.is_stopped() and state == 'Dead':
-		queue_free()
-		
-	prev_state = state
-
-func _on_smushed_area_entered(area: Area2D) -> void:
-	if area == smusher and\
-	(abs(player.velocity.y) == player.velocity.y) and player.velocity.y != 0:
-		state = 'Dead'
+		sprite.play('shell')
 
 func _on_killer_area_entered(area: Area2D) -> void:
 	if area == killed and player.is_alive:
@@ -74,7 +58,7 @@ func _on_killer_area_entered(area: Area2D) -> void:
 		await get_tree().create_timer(0.5).timeout
 		
 		player.collider.set_deferred('disabled', true)
-		player.killed.set_deferred('monitoring', false)
+		player.killed.set_deferred('monitoring', true)
 		player.smusher.set_deferred('monitorable', false)
 		
 		player.velocity.y = player.jump_height

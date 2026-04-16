@@ -1,12 +1,12 @@
-[gd_scene load_steps=16 format=3 uid="uid://cvtad3k7qxe0l"]
+[gd_scene format=3 uid="uid://cvtad3k7qxe0l"]
 
 [ext_resource type="Script" uid="uid://dyr3vmwn7xwqr" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="Shader" uid="uid://v3muweew0xji" path="res://shaders/luigi.gdshader" id="2_dqkch"]
 [ext_resource type="Texture2D" uid="uid://bqsf5eoqnkmib" path="res://assets/small_mario.png" id="2_g2els"]
-[ext_resource type="Shader" uid="uid://sprxbwwtqrfm" path="res://shaders/mario.gdshader" id="2_qhqgy"]
 [ext_resource type="Texture2D" uid="uid://bp12eyr15xnap" path="res://assets/small_mario_v2.png" id="3_dqkch"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dqkch"]
-shader = ExtResource("2_qhqgy")
+shader = ExtResource("2_dqkch")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_smehm"]
 atlas = ExtResource("3_dqkch")
@@ -78,41 +78,41 @@ radius = 5.0
 height = 14.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_g2els"]
-size = Vector2(14, 1)
+size = Vector2(16, 3)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_dqkch"]
 radius = 5.1
 height = 13.0
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" unique_id=1276359306]
 script = ExtResource("1_g2els")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1323861690]
 texture_filter = 1
 material = SubResource("ShaderMaterial_dqkch")
 sprite_frames = SubResource("SpriteFrames_smehm")
-animation = &"die"
+animation = &"idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1578633758]
 position = Vector2(0, 1)
 shape = SubResource("CapsuleShape2D_qhqgy")
 
-[node name="SmusherArea" type="Area2D" parent="."]
+[node name="SmusherArea" type="Area2D" parent="." unique_id=1411536492]
 
-[node name="SmusherCollision" type="CollisionShape2D" parent="SmusherArea"]
-position = Vector2(0, 6.5)
+[node name="SmusherCollision" type="CollisionShape2D" parent="SmusherArea" unique_id=210472861]
+position = Vector2(0, 7.5)
 shape = SubResource("RectangleShape2D_g2els")
 
-[node name="KilledArea" type="Area2D" parent="."]
+[node name="KilledArea" type="Area2D" parent="." unique_id=158300473]
 position = Vector2(0, 0.5)
 
-[node name="KilledCollision" type="CollisionShape2D" parent="KilledArea"]
+[node name="KilledCollision" type="CollisionShape2D" parent="KilledArea" unique_id=1450500319]
 shape = SubResource("CapsuleShape2D_dqkch")
 
-[node name="CoyoteTimer" type="Timer" parent="."]
+[node name="CoyoteTimer" type="Timer" parent="." unique_id=1425643655]
 wait_time = 0.05
 one_shot = true
 
-[node name="UpCoyoteTimer" type="Timer" parent="."]
+[node name="UpCoyoteTimer" type="Timer" parent="." unique_id=691769865]
 wait_time = 0.25
 one_shot = true

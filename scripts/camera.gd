@@ -5,4 +5,4 @@ extends Camera2D
 
 func _process(delta: float) -> void:
 	if follow_player:
-		position = player.position
+		position.x = player.position.x
