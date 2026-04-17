@@ -13,29 +13,22 @@ region = Rect2(32, 0, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_k1qtu"]
 atlas = ExtResource("4_k1qtu")
-region = Rect2(48, 0, 16, 24)
+region = Rect2(0, 0, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xum81"]
 atlas = ExtResource("4_k1qtu")
-region = Rect2(0, 0, 16, 24)
+region = Rect2(16, 0, 16, 24)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_grttc"]
 atlas = ExtResource("4_k1qtu")
-region = Rect2(16, 0, 16, 24)
+region = Rect2(32, 0, 16, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vo5xu"]
+atlas = ExtResource("4_k1qtu")
+region = Rect2(48, 0, 16, 24)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_l0j8n"]
 animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_py2lt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_k1qtu")
-}],
-"loop": true,
-"name": &"get_out",
-"speed": 5.0
-}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_py2lt")
@@ -46,14 +39,25 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_xum81")
+"texture": SubResource("AtlasTexture_k1qtu")
 }, {
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_grttc")
+"texture": SubResource("AtlasTexture_xum81")
 }],
 "loop": true,
 "name": &"walk",
-"speed": 4.0
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_grttc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vo5xu")
+}],
+"loop": true,
+"name": &"wiggling",
+"speed": 5.0
 }]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_fgpj4"]
@@ -70,10 +74,8 @@ texture_filter = 1
 material = SubResource("ShaderMaterial_fgpj4")
 position = Vector2(0, -4)
 sprite_frames = SubResource("SpriteFrames_l0j8n")
-animation = &"get_out"
+animation = &"walk"
 autoplay = "walk"
-frame = 1
-frame_progress = 0.87244874
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1356325545]
 position = Vector2(0, 1)
@@ -92,5 +94,10 @@ position = Vector2(0, 1)
 [node name="KillerCollision" type="CollisionShape2D" parent="KillerArea" unique_id=51460698]
 shape = SubResource("CircleShape2D_fgpj4")
 
+[node name="ShelledTimer" type="Timer" parent="." unique_id=1159163956]
+wait_time = 5.0
+one_shot = true
+
 [connection signal="area_entered" from="SmushedArea" to="." method="_on_smushed_area_entered"]
 [connection signal="area_entered" from="KillerArea" to="." method="_on_killer_area_entered"]
+[connection signal="timeout" from="ShelledTimer" to="." method="_on_shelled_timer_timeout"]

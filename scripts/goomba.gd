@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 # editables
-@export var max_speed := 1200.0
+@export var max_speed := 1600.0
 @export_enum('Alive', 'Dead') var state := 'Alive'
 
 @onready var prev_state := state

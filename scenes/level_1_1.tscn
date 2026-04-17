@@ -39,7 +39,7 @@ tile_set = SubResource("TileSet_y2kk7")
 
 [node name="Player" parent="." unique_id=1298257301 instance=ExtResource("2_io50f")]
 unique_name_in_owner = true
-position = Vector2(13, -21)
+position = Vector2(766, -17)
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=401664719]
 position = Vector2(0, -88)
@@ -50,4 +50,4 @@ script = ExtResource("6_l7o8d")
 position = Vector2(8, -8)
 
 [node name="Koopa" parent="." unique_id=357573078 instance=ExtResource("7_pi2xh")]
-position = Vector2(908, -64)
+position = Vector2(795, -11)
