@@ -28,11 +28,12 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 		
-	if is_on_wall():
-		direction *= -1
-		
 	if state == 'Alive':
 		velocity.x = direction * delta
+		
+		if is_on_wall():
+			direction *= -1
+			
 	elif state == 'Shelled':
 		velocity.x = 0
 	
@@ -45,7 +46,7 @@ func _process(delta: float) -> void:
 		if abs(velocity.x) == velocity.x:
 			sprite.flip_h = false
 			
-	print(state)
+	print(direction)
 	
 	if state != prev_state:
 		if state == 'Alive':
@@ -55,8 +56,6 @@ func _process(delta: float) -> void:
 			sprite.play('walk')
 			
 		if state == 'Shelled':
-			direction = 0
-		
 			killer.set_deferred('monitoring', false)
 			smushed.set_deferred('monitoring', false)
 			
