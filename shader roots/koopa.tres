@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://df0w80pyer5pj"]
+
+[ext_resource type="Shader" uid="uid://sprxbwwtqrfm" path="res://shaders/thing_shader.gdshader" id="1_aggf5"]
+
+[resource]
+shader = ExtResource("1_aggf5")
+shader_parameter/color_1 = Color(0.22745098, 0.5176471, 0, 1)
+shader_parameter/color_2 = Color(1, 1, 1, 1)
+shader_parameter/color_3 = Color(0.9019608, 0.6117647, 0.12941177, 1)

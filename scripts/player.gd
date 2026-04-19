@@ -17,6 +17,12 @@ extends CharacterBody2D
 
 @export var is_alive := true
 
+@onready var thing := 0.0
+
+func _ready() -> void:
+	if player == 'Mario':
+		sprite.material
+
 func _physics_process(delta: float) -> void:
 	var direction := 0.0
 	
@@ -33,7 +39,11 @@ func _physics_process(delta: float) -> void:
 			
 	if is_on_floor() or not up_coyote.is_stopped():
 		direction = Input.get_axis("move_left", "move_right")
-		velocity.x *= 0.87
+		
+		if player == 'Mario':
+			velocity.x *= 0.87
+		elif player == 'Luigi':
+			velocity.x *= 0.9
 		
 	if is_on_floor() or not coyote.is_stopped():
 		if Input.is_action_just_pressed("jump") and is_alive:
@@ -48,6 +58,7 @@ func _physics_process(delta: float) -> void:
 
 func _process(delta: float) -> void:
 	if not is_on_floor():
+		thing += delta
 		sprite.play('jump')
 	elif abs(velocity.x) >= 10:
 		sprite.play('walk')

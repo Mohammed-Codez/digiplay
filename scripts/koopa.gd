@@ -2,7 +2,7 @@ extends CharacterBody2D
 
 # editables
 @export var max_speed := 1600.0
-@export_enum('Alive', 'Shelled', 'Dead') var state := 'Alive'
+@export_enum('Alive', 'Shelled', 'Moving', 'Dead') var state := 'Alive'
 
 @onready var prev_state := state
 
@@ -16,6 +16,7 @@ extends CharacterBody2D
 @onready var killer := $KillerArea
 
 @onready var shelled_timer := $ShelledTimer
+@onready var moving_timer := $MovingTimer
 
 # player
 @onready var player := $'..'/Player
@@ -29,13 +30,19 @@ func _physics_process(delta: float) -> void:
 		velocity += get_gravity() * delta
 		
 	if state == 'Alive':
+		if is_on_wall():
+			direction *= -1
+		
 		velocity.x = direction * delta
 		
+	elif state == 'Shelled':
+		velocity.x = 0
+		
+	elif state == 'Moving':
 		if is_on_wall():
 			direction *= -1
 			
-	elif state == 'Shelled':
-		velocity.x = 0
+		velocity.x = 5 * direction * delta
 	
 	move_and_slide()
 
@@ -46,8 +53,6 @@ func _process(delta: float) -> void:
 		if abs(velocity.x) == velocity.x:
 			sprite.flip_h = false
 			
-	print(direction)
-	
 	if state != prev_state:
 		if state == 'Alive':
 			killer.set_deferred('monitoring', true)
@@ -55,17 +60,25 @@ func _process(delta: float) -> void:
 			
 			sprite.play('walk')
 			
-		if state == 'Shelled':
+		elif state == 'Shelled':
 			killer.set_deferred('monitoring', false)
-			smushed.set_deferred('monitoring', false)
 			
 			player.velocity.y *= -0.7
-			velocity.y = -100
 			
 			sprite.play('shell')
 			
 			if shelled_timer.is_stopped():
 				shelled_timer.start()
+				
+		elif state == 'Moving':
+			killer.set_deferred('monitoring', true)
+			
+			player.velocity.y *= -0.7
+			
+			sprite.play('shell')
+		
+		if state == 'Moving':
+			shelled_timer.stop()
 			
 	if state == 'Shelled' and shelled_timer.time_left < 3:
 		sprite.play("wiggling")
@@ -74,8 +87,15 @@ func _process(delta: float) -> void:
 
 func _on_smushed_area_entered(area: Area2D) -> void:
 	if area == smusher and\
-	(abs(player.velocity.y) == player.velocity.y) and player.velocity.y != 0:
-		state = 'Shelled'
+	((abs(player.velocity.y) == player.velocity.y) and player.velocity.y != 0):
+		if state == 'Alive':
+			state = 'Shelled'
+			
+		elif state == 'Shelled' and moving_timer.is_stopped():
+			state = 'Moving'
+			
+		elif state == 'Moving':
+			state = 'Shelled'
 
 func _on_killer_area_entered(area: Area2D) -> void:
 	if area == killed and player.is_alive:
