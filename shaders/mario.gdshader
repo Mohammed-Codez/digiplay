@@ -1,9 +1,5 @@
 shader_type canvas_item;
 
-uniform vec4 color_1 : source_color = vec4(0, 0, 0, 1);
-uniform vec4 color_2 : source_color = vec4(0.27450980392156865, 0.27450980392156865, 0.27450980392156865, 1);
-uniform vec4 color_3 : source_color = vec4(0.7058823529411765, 0.7058823529411765, 0.7058823529411765, 1);
-
 void vertex() {
 	// Called for every vertex the material is visible on.
 }
@@ -12,11 +8,11 @@ void fragment() {
 	// Called for every pixel the material is visible on.
 	vec4 current_color = texture(TEXTURE, UV);
 	if (current_color == vec4(0, 0, 0, 1)) {
-		COLOR = color_1;
+		COLOR = vec4(0.8470588235294118, 0.1568627450980392, 0, 1);
 	} else if (current_color == vec4(0.27450980392156865, 0.27450980392156865, 0.27450980392156865, 1)) {
-		COLOR = color_2;
+		COLOR = vec4(0.9882352941176471, 0.596078431372549, 0.2196078431372549, 1);
 	} else if (current_color == vec4(0.7058823529411765, 0.7058823529411765, 0.7058823529411765, 1)) {
-		COLOR = color_3;
+		COLOR = vec4(0.5333333333333333, 0.4392156862745098, 0, 1);
 	}
 }
 
