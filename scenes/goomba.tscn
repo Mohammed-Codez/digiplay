@@ -1,11 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://dj78y3etpvvye"]
+[gd_scene format=3 uid="uid://dj78y3etpvvye"]
 
 [ext_resource type="Texture2D" uid="uid://buipjhcfpx3nq" path="res://assets/goomba.png" id="1_21hcc"]
 [ext_resource type="Script" uid="uid://b7nxua4gfu7s0" path="res://scripts/goomba.gd" id="1_fgpj4"]
-[ext_resource type="Shader" uid="uid://b74c55d7k7cih" path="res://shaders/overworld.gdshader" id="1_s1jgw"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_fgpj4"]
-shader = ExtResource("1_s1jgw")
+[ext_resource type="Material" uid="uid://dgf4nysxlwx5a" path="res://shader roots/overworld.tres" id="2_fgpj4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l0j8n"]
 atlas = ExtResource("1_21hcc")
@@ -37,37 +34,46 @@ animations = [{
 "speed": 3.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_fgpj4"]
+[sub_resource type="CircleShape2D" id="CircleShape2D_l0j8n"]
 radius = 7.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fgpj4"]
-size = Vector2(16, 3)
+size = Vector2(18, 4)
 
-[node name="Goomba" type="CharacterBody2D"]
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_fgpj4"]
+radius = 7.0
+height = 14.1
+
+[node name="Goomba" type="CharacterBody2D" unique_id=357573078]
 script = ExtResource("1_fgpj4")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2042116817]
 texture_filter = 1
-material = SubResource("ShaderMaterial_fgpj4")
+material = ExtResource("2_fgpj4")
 sprite_frames = SubResource("SpriteFrames_l0j8n")
 animation = &"dead"
 autoplay = "walk"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1356325545]
 position = Vector2(0, 1)
-shape = SubResource("CircleShape2D_fgpj4")
+shape = SubResource("CircleShape2D_l0j8n")
 
-[node name="SmushedArea" type="Area2D" parent="."]
+[node name="SmushedArea" type="Area2D" parent="." unique_id=816322096]
 position = Vector2(0, -7.5)
 
-[node name="SmushedCollision" type="CollisionShape2D" parent="SmushedArea"]
+[node name="SmushedCollision" type="CollisionShape2D" parent="SmushedArea" unique_id=183603831]
+position = Vector2(0, -0.5)
 shape = SubResource("RectangleShape2D_fgpj4")
 
-[node name="KillerArea" type="Area2D" parent="."]
+[node name="KillerArea" type="Area2D" parent="." unique_id=1111999243]
 position = Vector2(0, 1)
 
-[node name="KillerCollision" type="CollisionShape2D" parent="KillerArea"]
-shape = SubResource("CircleShape2D_fgpj4")
+[node name="KillerCollision" type="CollisionShape2D" parent="KillerArea" unique_id=1201912771]
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_fgpj4")
+
+[node name="DeathTimer" type="Timer" parent="." unique_id=1159163956]
+one_shot = true
 
 [connection signal="area_entered" from="SmushedArea" to="." method="_on_smushed_area_entered"]
 [connection signal="area_entered" from="KillerArea" to="." method="_on_killer_area_entered"]
